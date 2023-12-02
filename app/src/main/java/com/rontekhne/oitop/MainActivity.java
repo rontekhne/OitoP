@@ -2,25 +2,31 @@ package com.rontekhne.oitop;
 
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
 import java.security.SecureRandom;
 public class MainActivity extends AppCompatActivity {
-    public int input, counter, mx, my;
-    public boolean success = false;
-    public int[][] board = new int[3][3];
-    public int[][] goal = new int[3][3];
-    public TextView[] btns = new TextView[9];
+    public int input, counter;
+    public boolean success;
+    public int[][] board;
+    public int[][] goal;
+    public Button[] btns;
     public TextView msg;
     public TextView count;
-    public TextView resetBtn;
+    public Button resetBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        success = false;
+        board = new int[3][3];
+        goal = new int[3][3];
+        btns = new Button[9];
 
         btns[0] = findViewById(R.id.button00);
         btns[1] = findViewById(R.id.button01);
@@ -32,8 +38,8 @@ public class MainActivity extends AppCompatActivity {
         btns[7] = findViewById(R.id.button21);
         btns[8] = findViewById(R.id.button22);
 
-        msg = findViewById(R.id.message);
         count = findViewById(R.id.count);
+        msg = findViewById(R.id.message);
         resetBtn = findViewById(R.id.buttonReset);
 
         counter = 1;
@@ -44,35 +50,30 @@ public class MainActivity extends AppCompatActivity {
         populateBoard();
     }
 
-    public void getInputBtn(View view)
+    public void getInput(View view)
     {
-        if (view instanceof Button) {
-            Button clickedButton = (Button) view;
-            String buttonText = clickedButton.getText().toString();
+        Button b = (Button)view;
+        String buttonText = b.getText().toString();
+        input = Integer.parseInt(buttonText);
 
-            try {
-                input = Integer.parseInt(buttonText);
+        success = move();
 
-                success = move();
-
-                if (success) {
-                    populateBoard();
-                    count.setText(counter++ + "ª jogada");
-                }
-
-                success = checkWinner();
-
-                if (success) {
-                    msg.setText("Parabéns! Você venceu!");
-                    resetBoard();
-                    initBoard(); // aleatoriamente
-                    populateBoard();
-                    counter = 0;
-                }
-            } catch (NumberFormatException e) {
-                msg.setText("Entrada inválida");
-            }
+        if (success) {
+            populateBoard();
+            String c = (counter++) + "ª jogada";
+            count.setText(c);
         }
+
+        success = checkWinner();
+
+        if (success) {
+            msg.setText("Parabéns! Você venceu!");
+            resetBoard();
+            initBoard(); // aleatoriamente
+            populateBoard();
+            counter = 0;
+        }
+
     }
 
     public void resetBtn(View view)
@@ -100,7 +101,7 @@ public class MainActivity extends AppCompatActivity {
                 goal[i][j] = count;
             }
         }
-        goal[3-1][3-1] = 0;
+        goal[2][2] = 0;
     }
 
     public void initBoard()
@@ -143,10 +144,12 @@ public class MainActivity extends AppCompatActivity {
     public void populateBoard()
     {
         int i, j, k;
+        String s;
 
         for (k = 0, i = 0; i < 3; i++) {
             for (j = 0; j < 3; j++, k++) {
-                btns[k].setText(String.valueOf(board[i][j]));
+                s = Integer.toString(board[i][j]);
+                btns[k].setText(s);
             }
         }
     }
@@ -154,7 +157,7 @@ public class MainActivity extends AppCompatActivity {
     public boolean move()
     {
         int eq, i, j, zx, zy, inpx, inpy;
-        boolean s = false;
+        boolean s;
 
         eq = i = j = zx = zy = inpx = inpy = 0;
 
@@ -189,14 +192,26 @@ public class MainActivity extends AppCompatActivity {
         }
 
         // apply rules for movement
-        if (zx >= 0 && zx < 3 && zy >= 0 && zy < 3 && // set bounds
-                (board[zx-1][zy] == input || board[zx+1][zy] == input ||
-                        board[zx][zy-1] == input || board[zx][zy+1] == input)) {
+        if (((zx == 0 && zy == 0) && (board[zx+1][zy] == input || board[zx][zy+1] == input)) ||
+                ((zx == 0 && zy == 1) && (board[zx][zy-1] == input || board[zx+1][zy] == input || board[zx][zy+1] == input)) ||
+                ((zx == 0 && zy == 2) && (board[zx][zy-1] == input || board[zx+1][zy] == input)) ||
+                ((zx == 1 && zy == 0) && (board[zx-1][zy] == input || board[zx][zy+1] == input || board[zx+1][zy] == input)) ||
+                ((zx == 1 && zy == 1) && (board[zx-1][zy] == input || board[zx][zy+1] == input || board[zx+1][zy] == input || board[zx][zy-1] == input)) ||
+                ((zx == 1 && zy == 2) && (board[zx-1][zy] == input || board[zx][zy-1] == input || board[zx+1][zy] == input)) ||
+                ((zx == 2 && zy == 0) && (board[zx-1][zy] == input || board[zx][zy+1] == input)) ||
+                ((zx == 2 && zy == 1) && (board[zx][zy-1] == input || board[zx-1][zy] == input || board[zx][zy+1] == input)) ||
+                ((zx == 2 && zy == 2) && (board[zx][zy-1] == input || board[zx-1][zy] == input))) {
 
             // swap
+            Log.e("OITO", "zx: " + zx);
+            Log.e("OITO", "zy: " + zy);
+            Log.e("OITO", "inpx: " + inpx);
+            Log.e("OITO", "inpy: " + inpy);
             board[zx][zy] = board[inpx][inpy];
             board[inpx][inpy] = 0;
 
+
+            msg.setText("Boa sorte!");
             s = true;
         } else {
             msg.setText("Movimento inválido!");
