@@ -1,8 +1,12 @@
 package com.rontekhne.oitop;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
+
+import android.content.Context;
+import android.content.res.Resources;
+import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -156,7 +160,20 @@ public class MainActivity extends AppCompatActivity {
                     btns[k].setBackgroundColor(0x00FFFFFF);
                     btns[k].setText("");
                 }else {
-                    btns[k].setBackgroundColor(0xFFE91E63);
+                    if (board[i][j] == goal[i][j]) {
+                        btns[k].setBackground(null);
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                            btns[k].setBackgroundTintList(ContextCompat.getColorStateList(this, R.color.green));
+                        }
+                        btns[k].setBackgroundColor(0xFF1BFF79);
+                    }else {
+                        btns[k].setBackground(null);
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                            btns[k].setBackgroundTintList(ContextCompat.getColorStateList(this, R.color.pink));
+                        }
+                        btns[k].setBackgroundColor(0xFFE91E63);
+                    }
+
                     btns[k].setText(s);
                 }
             }
