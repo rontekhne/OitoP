@@ -43,6 +43,7 @@ public class MainActivity extends AppCompatActivity {
         resetBtn = findViewById(R.id.buttonReset);
 
         counter = 1;
+        count.setText("0");
 
         resetBoard();
         initGoal();
@@ -81,6 +82,8 @@ public class MainActivity extends AppCompatActivity {
         resetBoard();
         initBoard(); // randomly
         populateBoard();
+        counter = 1;
+        count.setText("0");
     }
 
     public void resetBoard()
@@ -115,7 +118,7 @@ public class MainActivity extends AppCompatActivity {
             for (j = 0; j < 3; j++) {
                 k = 0; // quit do...while
                 do { // check for duplicates
-                    r = randomNumber.nextInt(3*3);
+                    r = randomNumber.nextInt(9);
                     d = 0; // loop flag
 
                     // verify duplicates
@@ -149,64 +152,41 @@ public class MainActivity extends AppCompatActivity {
         for (k = 0, i = 0; i < 3; i++) {
             for (j = 0; j < 3; j++, k++) {
                 s = Integer.toString(board[i][j]);
-                btns[k].setText(s);
+                if (board[i][j] == 0) {
+                    btns[k].setBackgroundColor(0x00FFFFFF);
+                    btns[k].setText("");
+                }else {
+                    btns[k].setBackgroundColor(0xFFE91E63);
+                    btns[k].setText(s);
+                }
             }
         }
     }
 
     public boolean move()
     {
-        int eq, i, j, zx, zy, inpx, inpy;
+        int i, j, zx, zy, inpx, inpy;
         boolean s;
 
-        eq = i = j = zx = zy = inpx = inpy = 0;
+        zx = zy = inpx = inpy = 0;
 
-        // get zero position
+        // get zero and input psoition
         for (i = 0; i < 3; i++) {
             for (j = 0; j < 3; j++) {
                 if (board[i][j] == 0) {
-                    eq = 1;
                     zx = i;
                     zy = j;
-                    break;
-                }
-            }
-            if (eq == 1) {
-                break;
-            }
-        }
-
-        // get input position
-        for (i = 0; i < 3; i++) {
-            for (j = 0; j < 3; j++) {
-                if (board[i][j] == input) {
-                    eq = 1;
+                }else if (board[i][j] == input) {
                     inpx = i;
                     inpy = j;
-                    break;
                 }
-            }
-            if (eq == 1) {
-                break;
             }
         }
 
         // apply rules for movement
-        if (((zx == 0 && zy == 0) && (board[zx+1][zy] == input || board[zx][zy+1] == input)) ||
-                ((zx == 0 && zy == 1) && (board[zx][zy-1] == input || board[zx+1][zy] == input || board[zx][zy+1] == input)) ||
-                ((zx == 0 && zy == 2) && (board[zx][zy-1] == input || board[zx+1][zy] == input)) ||
-                ((zx == 1 && zy == 0) && (board[zx-1][zy] == input || board[zx][zy+1] == input || board[zx+1][zy] == input)) ||
-                ((zx == 1 && zy == 1) && (board[zx-1][zy] == input || board[zx][zy+1] == input || board[zx+1][zy] == input || board[zx][zy-1] == input)) ||
-                ((zx == 1 && zy == 2) && (board[zx-1][zy] == input || board[zx][zy-1] == input || board[zx+1][zy] == input)) ||
-                ((zx == 2 && zy == 0) && (board[zx-1][zy] == input || board[zx][zy+1] == input)) ||
-                ((zx == 2 && zy == 1) && (board[zx][zy-1] == input || board[zx-1][zy] == input || board[zx][zy+1] == input)) ||
-                ((zx == 2 && zy == 2) && (board[zx][zy-1] == input || board[zx-1][zy] == input))) {
-
+        if ((Math.abs(zx - inpx) == 1 && zy == inpy) ||
+                (zx == inpx && Math.abs(zy - inpy) == 1)) {
             // swap
-            Log.e("OITO", "zx: " + zx);
-            Log.e("OITO", "zy: " + zy);
-            Log.e("OITO", "inpx: " + inpx);
-            Log.e("OITO", "inpy: " + inpy);
             board[zx][zy] = board[inpx][inpy];
             board[inpx][inpy] = 0;
 
