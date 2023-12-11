@@ -73,16 +73,16 @@ public class MainActivity extends AppCompatActivity {
 
         if (success) {
             msg.setText("Parabéns! Você venceu!");
-            resetBoard();
-            initBoard(); // aleatoriamente
-            populateBoard();
+            // resetBoard();
+            // initBoard(); // aleatoriamente
+            // populateBoard();
             counter = 0;
         }
-
     }
 
     public void resetBtn(View view)
     {
+        msg.setText("Boa sorte!");
         resetBoard();
         initBoard(); // randomly
         populateBoard();
@@ -165,7 +165,7 @@ public class MainActivity extends AppCompatActivity {
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                             btns[k].setBackgroundTintList(ContextCompat.getColorStateList(this, R.color.green));
                         }
-                        btns[k].setBackgroundColor(0xFF1BFF79);
+                        btns[k].setBackgroundColor(0xFF079E65);
                     }else {
                         btns[k].setBackground(null);
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
