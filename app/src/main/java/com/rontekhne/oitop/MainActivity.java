@@ -196,7 +196,7 @@ public class MainActivity extends AppCompatActivity {
 
         zx = zy = inpx = inpy = 0;
 
-        // get zero and input psoition
+        // get zero and input position
         for (i = 0; i < 3; i++) {
             for (j = 0; j < 3; j++) {
                 if (board[i][j] == 0) {
