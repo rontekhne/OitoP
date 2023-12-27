@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -66,26 +67,31 @@ public class MainActivity extends AppCompatActivity {
 
     public void getInput(View view)
     {
-        Button b = (Button)view;
+        Button b = (Button) view;
         String buttonText = b.getText().toString();
-        input = Integer.parseInt(buttonText);
 
-        success = move();
+        if (!buttonText.isEmpty()) {
+            input = Integer.parseInt(buttonText);
 
-        if (success) {
-            populateBoard();
-            String c = (counter++) + "ª jogada";
-            count.setText(c);
-        }
+            success = move();
 
-        success = checkWinner();
+            if (success) {
+                populateBoard();
+                String c = (counter++) + "ª jogada";
+                count.setText(c);
+            }
 
-        if (success) {
-            msg.setText("Parabéns! Você venceu!");
-            // resetBoard();
-            // initBoard(); // aleatoriamente
-            // populateBoard();
-            counter = 0;
+            success = checkWinner();
+
+            if (success) {
+                msg.setText("Parabéns! Você venceu!");
+                // resetBoard();
+                // initBoard(); // aleatoriamente
+                // populateBoard();
+                counter = 0;
+            }
+        } else {
+            Log.d("OitoP", "Empty string");
         }
     }
 
