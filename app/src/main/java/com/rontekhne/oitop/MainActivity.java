@@ -53,6 +53,15 @@ public class MainActivity extends AppCompatActivity {
         initGoal();
         initBoard(); // randomly
         populateBoard();
+
+        for (int i = 0; i <= 8; i++) {
+            btns[i].setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    getInput(v);
+                }
+            });
+        }
     }
 
     public void getInput(View view)
