@@ -122,7 +122,7 @@ public class MainActivity extends AppCompatActivity {
         // Ads
         AdRequest adRequest = new AdRequest.Builder().build();
 
-        // test ID, change it
+        // test ID, change it to AD_UNIT_ID
         InterstitialAd.load(this,"ca-app-pub-3940256099942544/1033173712", adRequest, new InterstitialAdLoadCallback() {
             @Override
             public void onAdLoaded(@NonNull InterstitialAd interstitialAd) {
